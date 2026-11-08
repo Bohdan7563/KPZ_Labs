@@ -1,15 +1,18 @@
-
 @SuppressWarnings("all")
 
-// ПОГАНО: Клас сервісу сам створював базу даних через new (жорстка прив'язка).
-// ДОБРЕ: Ми створили інтерфейси і передаємо їх через конструктор (DIP).
+/* 
+ * ПРИНЦИП DIP (Dependency Inversion Principle): Модулі високого рівня не повинні залежати від модулів низького рівня. 
+ * Вони мають залежати від абстракцій.
+ * Раніше клас сам створював базу через new OracleDatabase(). 
+ * Тепер ми створили інтерфейси, і передаємо конкретні реалізації через конструктор (Dependency Injection).
+ */
 
-// Абстракції
+// Абстракції (правила, яким мають відповідати бази даних, сховища та шини подій)
 interface Database { void saveRecord(String id); }
 interface FileStorage { void saveEncrypted(String id, String data); }
 interface EventBus { void publish(String event, String id); }
 
-// Реалізації
+// Конкретні реалізації (можна легко замінити на MySQL, Amazon S3 або RabbitMQ)
 class OracleDatabase implements Database { 
     @Override public void saveRecord(String id) { System.out.println("[Oracle] Запис " + id + " збережено."); } 
 }
@@ -20,13 +23,14 @@ class KafkaEventBus implements EventBus {
     @Override public void publish(String event, String id) { System.out.println("[Kafka] Подія '" + event + "' для " + id); } 
 }
 
-// Високорівневий клас (залежить від абстракцій)
+// Високорівневий клас
 class PatientRecordService {
+    // Він залежить від абстракцій (інтерфейсів), а не від конкретних класів
     private final Database db;
     private final FileStorage storage;
     private final EventBus eventBus;
 
-    // Dependency Injection через конструктор
+    // Впровадження залежностей через конструктор (Constructor Injection)
     public PatientRecordService(Database db, FileStorage storage, EventBus eventBus) {
         this.db = db;
         this.storage = storage;
@@ -40,12 +44,12 @@ class PatientRecordService {
     }
 }
 
-@SuppressWarnings("all")
 public class Task5_DIP {
     @SuppressWarnings("all")
     public static void main(String[] args) {
         System.out.println("--- Завдання 5: DIP (Медицина) ---");
-        // Точка збірки (Composition Root)
+        
+        // Точка збірки (Composition Root): тут ми вирішуємо, які саме реалізації передати.
         PatientRecordService service = new PatientRecordService(
             new OracleDatabase(),
             new LocalEncryptedStorage(),

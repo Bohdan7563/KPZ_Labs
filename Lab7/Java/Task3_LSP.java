@@ -1,47 +1,28 @@
 @SuppressWarnings("all")
-public class Task3_LSP {
-    // Клієнтський код приймає лише фізичні товари (безпечно)
-    public static void processReturn(PhysicalItem item, int qty) {
-        item.returnToSupplier(qty);
-    }
 
-    @SuppressWarnings("all")
-    public static void main(String[] args) {
-        System.out.println("--- Завдання 3: LSP (Склад) ---");
-        
-        // 1. Створюємо фізичний товар
-        StandardProduct laptop = new StandardProduct("SKU-1", "Ноутбук", 10);
-        
-        // Використовуємо всі методи, щоб не було варнінгів
-        laptop.restock(5);      // Тепер метод restock використовується
-        processReturn(laptop, 2);
-        System.out.println("Залишок на складі: " + laptop.getStock()); // Тепер поле stock читається
+/* 
+ * ПРИНЦИП LSP (Liskov Substitution Principle): Нащадки повинні поводитися так само, як і їхні батьки.
+ * Раніше "Цифрова ліцензія" наслідувала "Фізичний товар", але не могла виконувати метод restock (поповнення) 
+ * і викидала помилку. Це порушувало принцип. 
+ * Ми розділили інтерфейси. Тепер Цифрова ліцензія взагалі не має методу restock, тому помилки неможливі.
+ */
 
-        // 2. Створюємо цифрову ліцензію
-        // (Це доводить, що ми можемо її створити, але вона НЕ має методу restock, тому LSP не порушується)
-        DigitalLicense license = new DigitalLicense("LIC-1", "Антивірус");
-        System.out.println("Цифровий товар створено: " + license.getTitle());
-    }
-}
-
-@SuppressWarnings("all")
+// Базовий інтерфейс для ВСІХ товарів (і фізичних, і цифрових)
 interface InventoryItem { 
     String getSku(); 
     String getTitle(); 
 }
 
-// Тільки фізичні товари можна поповнювати та повертати
-@SuppressWarnings("all")
+// Додатковий інтерфейс ТІЛЬКИ для фізичних товарів, які можна поповнювати
 interface PhysicalItem extends InventoryItem { 
     void restock(int amount); 
     void returnToSupplier(int amount); 
 }
 
-// Фізичний товар
+// Фізичний товар реалізує обидва інтерфейси
 @SuppressWarnings("all")
 class StandardProduct implements PhysicalItem {
-    // Додано final, бо ці поля не змінюються після створення (вимога IDEA)
-    private final String sku; 
+    private final String sku; // final означає, що поле не можна змінити після створення
     private final String title; 
     private int stock;
     
@@ -54,8 +35,7 @@ class StandardProduct implements PhysicalItem {
     @Override public String getSku() { return sku; }
     @Override public String getTitle() { return title; }
     
-    // Додано геттер, щоб поле stock "використовувалося"
-    public int getStock() { return stock; }
+    public int getStock() { return stock; } // Геттер для отримання залишку
 
     @Override 
     public void restock(int amount) { 
@@ -70,7 +50,7 @@ class StandardProduct implements PhysicalItem {
     }
 }
 
-// Цифровий товар НЕ реалізує PhysicalItem, тому неможливо викликати restock (безпечно)
+// Цифровий товар реалізує ТІЛЬКИ базовий інтерфейс (він не вміє поповнюватися на складі)
 @SuppressWarnings("all")
 class DigitalLicense implements InventoryItem {
     private final String sku; 
@@ -83,4 +63,25 @@ class DigitalLicense implements InventoryItem {
     
     @Override public String getSku() { return sku; }
     @Override public String getTitle() { return title; }
+}
+
+public class Task3_LSP {
+    // Клієнтський код приймає лише ті об'єкти, які ТОЧНО вміють робити returnToSupplier
+    public static void processReturn(PhysicalItem item, int qty) {
+        item.returnToSupplier(qty);
+    }
+
+    @SuppressWarnings("all")
+    public static void main(String[] args) {
+        System.out.println("--- Завдання 3: LSP (Склад) ---");
+        
+        StandardProduct laptop = new StandardProduct("SKU-1", "Ноутбук", 10);
+        laptop.restock(5); // Метод працює
+        processReturn(laptop, 2);
+        System.out.println("Залишок на складі: " + laptop.getStock());
+
+        // Створюємо цифровий товар. Він не має методу restock, тому ми навіть не зможемо викликати його випадково.
+        DigitalLicense license = new DigitalLicense("LIC-1", "Антивірус");
+        System.out.println("Цифровий товар створено: " + license.getTitle());
+    }
 }

@@ -1,0 +1,7 @@
+# Налаштування IntelliJ IDEA
+.idea/
+*.iml
+
+# Скомпільовані файли Java
+out/
+*.class

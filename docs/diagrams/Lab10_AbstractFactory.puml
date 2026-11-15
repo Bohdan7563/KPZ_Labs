@@ -1,0 +1,35 @@
+@startuml
+interface FilmCopy { + void play(); }
+interface ProjectorProfile { + void setup(); }
+interface SoundProfile { + void configure(); }
+
+class Film2D implements FilmCopy
+class Projector2D implements ProjectorProfile
+class SoundStereo implements SoundProfile
+
+class Film3D implements FilmCopy
+class Projector3D implements ProjectorProfile
+class SoundSurround implements SoundProfile
+
+class FilmDolby implements FilmCopy
+class ProjectorDolby implements ProjectorProfile
+class SoundDolby implements SoundProfile
+
+interface HallFormatFactory { + FilmCopy createFilm(); + ProjectorProfile createProjector(); + SoundProfile createSound(); }
+class Format2DFactory implements HallFormatFactory
+class Format3DFactory implements HallFormatFactory
+class FormatDolbyFactory implements HallFormatFactory
+
+Format2DFactory ..> Film2D : creates
+Format2DFactory ..> Projector2D : creates
+Format2DFactory ..> SoundStereo : creates
+
+Format3DFactory ..> Film3D : creates
+Format3DFactory ..> Projector3D : creates
+Format3DFactory ..> SoundSurround : creates
+
+FormatDolbyFactory ..> FilmDolby : creates
+FormatDolbyFactory ..> ProjectorDolby : creates
+FormatDolbyFactory ..> SoundDolby : creates
+note right of HallFormatFactory : Abstract Factory
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+interface Ticket { + void printView(); }
+class PaperTicket implements Ticket
+class PdfTicket implements Ticket
+class AppTicket implements Ticket
+class KioskTicket implements Ticket
+
+interface TicketFactory { + Ticket createTicket(); }
+class BoxOfficeFactory implements TicketFactory
+class WebFactory implements TicketFactory
+class AppFactory implements TicketFactory
+class KioskFactory implements TicketFactory
+
+BoxOfficeFactory ..> PaperTicket : creates
+WebFactory ..> PdfTicket : creates
+AppFactory ..> AppTicket : creates
+KioskFactory ..> KioskTicket : creates
+
+class SalesProcess {
+  + sellTicket(TicketFactory factory, String seat)
+}
+SalesProcess --> TicketFactory : uses
+note right of TicketFactory : Factory Method
+@enduml

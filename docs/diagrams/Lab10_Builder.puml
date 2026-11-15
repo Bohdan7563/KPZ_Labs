@@ -1,0 +1,24 @@
+@startuml
+class TicketOrder {
+  - String session
+  - List<String> seats
+  - String popcorn
+  - String drinks
+  - boolean vipService
+  - String promoCode
+}
+class TicketOrderBuilder {
+  + TicketOrderBuilder(String session)
+  + addSeat(String seat)
+  + addPopcorn(String type)
+  + addDrinks(String type)
+  + addPromoCode(String code)
+  + build() : TicketOrder
+}
+class OrderDirector {
+  + buildComboForTwo(TicketOrderBuilder builder)
+}
+OrderDirector ..> TicketOrderBuilder : uses
+TicketOrderBuilder ..> TicketOrder : creates
+note right of TicketOrderBuilder : Builder
+@enduml

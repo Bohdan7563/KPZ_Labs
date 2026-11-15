@@ -1,0 +1,14 @@
+@startuml
+class AdBlock {
+  + String content
+  + AdBlock clone()
+}
+class CinemaSession {
+  + String movieTitle
+  + String hall
+  + AdBlock adBlock
+  + CinemaSession clone()
+}
+CinemaSession *--> AdBlock
+note right of CinemaSession : Prototype
+@enduml

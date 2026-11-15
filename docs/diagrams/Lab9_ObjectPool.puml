@@ -1,0 +1,16 @@
+@startuml
+class Glasses3D {
+  + int id
+  + boolean isClean
+  + void reset()
+}
+class GlassesPool {
+  - List<Glasses3D> available
+  - List<Glasses3D> inUse
+  + GlassesPool(int size)
+  + Glasses3D acquire()
+  + void release(Glasses3D glasses)
+}
+GlassesPool o--> Glasses3D
+note right of GlassesPool : Object Pool
+@enduml

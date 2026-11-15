@@ -1,0 +1,10 @@
+@startuml
+class TicketSalesSystem {
+  - static TicketSalesSystem instance
+  - Set<String> soldSeats
+  - TicketSalesSystem()
+  + static TicketSalesSystem getInstance()
+  + boolean buyTicket(String session, String seat)
+}
+note right of TicketSalesSystem : Singleton
+@enduml

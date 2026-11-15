@@ -1,0 +1,12 @@
+@startuml
+interface MovieSession { + String getDescription(); + double getPrice(); }
+class BaseSession implements MovieSession
+abstract class SessionDecorator implements MovieSession {
+  # MovieSession wrappedSession
+}
+class Session3DDecorator extends SessionDecorator
+class SubtitlesDecorator extends SessionDecorator
+class WeekendDiscountDecorator extends SessionDecorator
+SessionDecorator o--> MovieSession
+note right of SessionDecorator : Decorator
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+interface Trailer { + void play(User user); }
+class RealTrailer implements Trailer
+class TrailerProxy implements Trailer {
+  - RealTrailer realTrailer
+  - boolean isLoaded
+}
+TrailerProxy --> RealTrailer : controls access & loads
+note right of TrailerProxy : Proxy
+@enduml

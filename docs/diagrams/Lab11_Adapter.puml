@@ -1,0 +1,12 @@
+@startuml
+interface PaymentProcessor { + boolean pay(double amountUah); }
+class BankTerminal {
+  + int processPayment(int amountKopecks)
+}
+class BankTerminalAdapter implements PaymentProcessor {
+  - BankTerminal terminal
+  + boolean pay(double amountUah)
+}
+BankTerminalAdapter --> BankTerminal : adapts
+note right of BankTerminalAdapter : Adapter
+@enduml

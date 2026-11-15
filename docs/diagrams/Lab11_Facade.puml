@@ -1,0 +1,17 @@
+@startuml
+class MovieLoader { + void loadCopy() }
+class Projector { + void setup() }
+class SoundSystem { + void configure() }
+class Lighting { + void dimLights() }
+class AdSystem { + void playAds() }
+
+class SessionPreparationFacade {
+  + void prepareSession()
+}
+SessionPreparationFacade --> MovieLoader
+SessionPreparationFacade --> Projector
+SessionPreparationFacade --> SoundSystem
+SessionPreparationFacade --> Lighting
+SessionPreparationFacade --> AdSystem
+note right of SessionPreparationFacade : Facade
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+class SeatCategory {
+  - String name
+  - double price
+}
+class Seat {
+  - int row
+  - int number
+  - boolean isSold
+  - SeatCategory category
+}
+class SeatCategoryFactory {
+  - Map<String, SeatCategory> cache
+  + SeatCategory getCategory(String name)
+}
+Seat --> SeatCategory : refers to
+SeatCategoryFactory ..> SeatCategory : creates & caches
+note right of SeatCategoryFactory : Flyweight Factory
+note right of SeatCategory : Flyweight
+@enduml

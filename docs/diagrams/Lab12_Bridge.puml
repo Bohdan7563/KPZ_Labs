@@ -1,0 +1,21 @@
+@startuml
+interface AdMedium {
+  + void showAd(String content)
+}
+class HallScreen implements AdMedium
+class LobbyScreens implements AdMedium
+class MobileApp implements AdMedium
+class LedFacade implements AdMedium
+
+abstract class Ad {
+  # AdMedium medium
+  + abstract void play()
+}
+class TrailerAd extends Ad
+class PartnerAd extends Ad
+class SocialAd extends Ad
+
+Ad o--> AdMedium : bridge
+note right of Ad : Abstraction
+note right of AdMedium : Implementor
+@enduml

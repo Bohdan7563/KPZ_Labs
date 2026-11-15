@@ -1,0 +1,15 @@
+@startuml
+interface FestivalComponent {
+  + int getDuration()
+  + int getFilmCount()
+  + void display(String prefix)
+}
+class Film implements FestivalComponent
+class ProgramGroup implements FestivalComponent {
+  - List<FestivalComponent> children
+  + void add(FestivalComponent c)
+}
+ProgramGroup o--> FestivalComponent : contains
+note right of ProgramGroup : Composite
+note bottom of Film : Leaf
+@enduml

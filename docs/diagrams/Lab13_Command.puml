@@ -1,0 +1,29 @@
+@startuml
+interface Command {
+  + void execute()
+  + void undo()
+}
+class LightCommand implements Command
+class VolumeCommand implements Command
+class MacroCommand implements Command {
+  - List<Command> commands
+  + void add(Command c)
+}
+class CinemaHall {
+  + void setLight(boolean state)
+  + void setVolume(int level)
+}
+class Operator {
+  - List<Command> history
+  + void executeCommand(Command c)
+  + void undoLast()
+}
+
+Operator o--> Command : invokes
+MacroCommand o--> Command : contains
+LightCommand --> CinemaHall : receiver
+VolumeCommand --> CinemaHall : receiver
+note right of Command : Command Interface
+note right of Operator : Invoker
+note right of CinemaHall : Receiver
+@enduml

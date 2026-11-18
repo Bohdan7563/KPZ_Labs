@@ -1,0 +1,21 @@
+@startuml
+abstract class DiscountHandler {
+  # DiscountHandler next
+  + void setNext(DiscountHandler next)
+  + abstract void handle(Order order)
+}
+class PromoCodeHandler extends DiscountHandler
+class StudentHandler extends DiscountHandler
+class PensionerHandler extends DiscountHandler
+class Order {
+  + double price
+  + boolean isDiscountApplied
+}
+
+DiscountHandler o--> DiscountHandler : next
+PromoCodeHandler --> Order : modifies
+StudentHandler --> Order : modifies
+PensionerHandler --> Order : modifies
+note right of DiscountHandler : Handler
+note right of Order : Context
+@enduml
